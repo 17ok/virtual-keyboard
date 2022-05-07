@@ -17,7 +17,7 @@ body {
 }
 
 .keyboard-textarea {
-  width: 710px;
+  width: 725px;
   height: 200px;
   background: white;
   border: 3px solid black;
@@ -27,15 +27,26 @@ body {
 }
 
 .keyboard-container {
-  width: 710px;
-  height: 200px;
+  width: 725px;
+  height: 250px;
   background: #93f3a1;
   border: 3px solid #031f07;
   padding: 5px;
   border-radius: 10px;
   -webkit-box-shadow: 10px 5px 5px #222d24;
           box-shadow: 10px 5px 5px #222d24;
-  gap: 4px;
+  gap: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .keyboard-key {
@@ -82,7 +93,7 @@ body {
           box-shadow: 5px 2px 2px #c5ee0b;
 }
 
-.keyboard-key-light::after {
+.keyboard-key-light ::after {
   position: absolute;
   content: '';
   top: 2px;
