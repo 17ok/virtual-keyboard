@@ -95,6 +95,13 @@ body {
   transition: All 0.5s ease;
 }
 
+.keyboard-key-activated {
+  color: grey;
+  background: white;
+  -webkit-box-shadow: 5px 2px 2px #c5ee0b;
+          box-shadow: 5px 2px 2px #c5ee0b;
+}
+
 .keyboard-key-light ::after {
   position: absolute;
   content: '';

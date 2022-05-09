@@ -2,7 +2,7 @@ import ruLang from './langru.js';
 import enLang from './lang.js';
 export default {ruLang, enLang};
 
-const textField = document.querySelector('.keyboard-textarea');
+
 
 
 /*
@@ -44,6 +44,7 @@ const Keyboard = {
 
         this.textarea = document.createElement('textarea');
         this.textarea.classList.add('keyboard-textarea');
+   
 
         this.keyboard = document.createElement('div');
         this.keyboard.classList.add('keyboard-container');
@@ -61,41 +62,50 @@ const Keyboard = {
         document.body.appendChild(this.wrapper);
         this.textarea.focus();
 
-      
-  // document.addEventListener('mousedown', this.printVirtualKeys());
- // document.addEventListener('mouseup', this.printVirtualKeys());
+        this.textarea.value = '';
 
+      //  this.textarea.addEventListener('focus', () => {
+     //       this.textarea.value += this.values.value;
+      //  })
           
     },
 
     //create key buttons
     createKeyBtns(){
         const fragment = document.createDocumentFragment();
-        let language = enLang;
+       let language = enLang;
+        const textField = document.getElementsByTagName('textarea');
         language.forEach(function (key) {
              const keyBtn = document.createElement('button');
              keyBtn.classList.add('keyboard-key');
              keyBtn.setAttribute('data-type', key.code);
-             keyBtn.addEventListener('click', () => {keyBtn.classList.toggle('keyboard-key-active')});
+             keyBtn.addEventListener('mousedown', () => { keyBtn.classList.add('keyboard-key-activated')});
+             keyBtn.addEventListener('mouseup', () => {keyBtn.classList.remove('keyboard-key-activated')});
+             keyBtn.addEventListener('mouseout', () => {keyBtn.classList.remove('keyboard-key-activated')});
              switch (key.code) {
                  case 'Backspace':
                      {
                           keyBtn.classList.add('keyboard-key-two');
                           keyBtn.textContent = key.small;
                          keyBtn.addEventListener('click', () => {
-                         textField.textContent = textField.textContent.substring(0, textField.textContent-1);
+                         textField[0].value = textField[0].value.substring(0, textField[0].value.length-1);
                        })
                     }
                         break;
                 case 'Tab':
                  {
                  keyBtn.textContent = key.small;
-                 //textField.textContent = textField.textContent + "    ";
+                 keyBtn.addEventListener('click', () =>{
+                    textField[0].value += "    ";
+                 })
                  };
                 break;
                 case 'Delete':
                 {
-                keyBtn.textContent = key.small;   
+                keyBtn.textContent = key.small;  
+                keyBtn.addEventListener('click', () =>{
+                    textField[0].value = " ";
+                 }) 
                 };
                 break;
                 case 'CapsLock':
@@ -104,7 +114,7 @@ const Keyboard = {
                    keyBtn.textContent = key.small;
                   keyBtn.addEventListener('click', () =>{
                       this.capsLockToggle();
-                      keyBtn.classList.toggle(this.values.capsLock);
+                      this.values.capsLock = !this.values.capsLock;
                   })
                 };
                break;
@@ -112,9 +122,9 @@ const Keyboard = {
                  {
                 keyBtn.classList.add('keyboard-key-two');
                 keyBtn.textContent = key.small;
-               // keyBtn.addEventListener('click', () =>{
-                    //textField.textContent = textField.textContent + "\n";
-              //  })
+               keyBtn.addEventListener('click', () =>{
+                textField[0].value +=  "\n";
+               })
 
             };
                 break;
@@ -127,6 +137,7 @@ const Keyboard = {
                 case 'ArrowUp':
                 {
                 keyBtn.innerHTML = '&#11205;';
+               
                 };
                 break;
                 case 'ShiftRight':
@@ -139,14 +150,14 @@ const Keyboard = {
              {
             keyBtn.textContent = key.small;
             };
-                                        break;
+                break;
                  case 'Space':
                 {
                 keyBtn.classList.add('keyboard-key-seven');
                 keyBtn.textContent = key.small;
-              //  keyBtn.addEventListener('click', () =>{
-                   // textField.textContent = textField.textContent + " ";
-               // })
+              keyBtn.addEventListener('click', () =>{
+                   textField[0].value += " ";
+                })
                 };
                 break;
                 case 'ArrowLeft':
@@ -167,7 +178,9 @@ const Keyboard = {
                  default: 
                   
                  keyBtn.textContent = key.small;
-                
+                keyBtn.addEventListener('mousedown', () => {
+                    textField[0].value += key.small;
+                });
                  
                  
                break;
@@ -180,12 +193,13 @@ const Keyboard = {
 
     },
     capsLockToggle() {
-        this.values.capsLock = !this.values.capsLock;
+       // this.values.capsLock = !this.values.capsLock;
         const buttonsArr = this.keyboard.querySelectorAll('.keyboard-key');
         console.log(buttonsArr);
         for (const element of buttonsArr){
-            if (element.childElementCount === 0) {
-                element.textContent = this.values.capsLock ? element.textContent.toUpperCase() : element.textContent.toLowerCase();
+         {
+                //element.textContent = 
+                this.values.capsLock ? element.textContent.toUpperCase() : element.textContent.toLowerCase();
             }
         }
     },
@@ -195,21 +209,27 @@ const Keyboard = {
 window.addEventListener("DOMContentLoaded", function() {Keyboard.createElements();});
 window.addEventListener('keydown', keydown);
 window.addEventListener('keyup', keyup);
+const keyboardButtons = document.getElementsByTagName('button');
+const keyboard = document.querySelector('.keyboard-container');
+
 
 function keydown(event){
     const keyactive = document.querySelector(`[data-type =${event.code}]`);
     if (keyactive) {
-        //console.log(keyactive);
         keyactive.classList.add('keyboard-key-active');
     }
 };
 function keyup(event){
     const keyactive = document.querySelector(`[data-type =${event.code}]`);
     if (keyactive) {
-        //console.log(keyactive);
         keyactive.classList.remove('keyboard-key-active');
     }
 };
+
+const textField = document.getElementsByTagName('textarea');
+console.log(textField);
+console.log(textField.data);
+
 
 function setLanguage(language){
     window.localStorage.setItem('language', language)
@@ -234,75 +254,26 @@ function changeLanguage() {
     }
 
     }
-
-
-//textField.focus();
-
-
-
-
-   /* printKeys(event) {
-     // let textField = document.querySelector('.keyboard-textarea');
-     //if (event.stopPropagation) event.stopPropagation;
-          const {code, type} = event;
-          console.log(event);
-          const keyObject = this.keyBtns.find((key) => key.code === code);
-          if (!keyObject) return;
-          this.textField.focus();
-          if (type.match(/keydown|mousedown/)) {
-              if(type.match(/key/)) event.preventDefault();
-Keyboard.keyBtn.classList.add('.keyboard-key-active');
-          } else if (type.match(/keyup|mouseup/)){
-              Keyboard.keyBtn.classList.remove('.keyboard-key-active');
-          }
-      }*/
-   
-      
-    
-
- //   };
- /*  
-const keyboardButtons = document.querySelectorAll('.keyboard-key');
-function printVirtualKeys() {
-        keyboardButtons.forEach(element => {
-                element.addEventListener('click', function(event)
-                {
-                    console.log('click');
-                    textField.textContent += element.textContent;
-                })
-            
-        })
-    };
-    printVirtualKeys();
+/*
+function capsLockchange(){
+    let capsBtn = document.querySelector(`[data-type =${CapsLock}]`);
+    if (capsBtn.classList.contains('keyboard-key-active'||'keyboard-key-activated'){
+        function() {Keyboard.createKeyBtns();}
+    } )
+}
 */
 
-    /*capsLockToggle() {
-        if (this.capsLock === 'active') {
-        this.capsLock = '';
-        caseToggle();
-    } else {
-    this.capsLock ='active';
-    caseToggle();
-    }
-    },
-    caseToggle() {
-        for (const element of this.keyBtns) {
-        if (this.capsLock === 'active') {
-                this.element.textContent = key.shift; 
-            } else {
-                this.element.textContent = key.small;
-            }
-        }
-    }*/
 
- 
-   /* function print(event) {
+    
+ /*
+function print(event) {
+       const keyactive = document.querySelector(`[data-type =${event.code}]`);
         let onkeydown = event.code;
-        let textField = document.querySelector('.keyboard-textarea');
+        let textField = document.getElementsByTagName('textarea');
         engLang.forEach(elem => {
             if (elem.code === onkeydown)
             {
-                if (elem.code === 'Enter'){
+                if (elem.[data-type =${event.code}]=== 'Enter'){
                     textField.textContent += '\n';
                 } else {
                     textField.textContent = elem.key.small;
@@ -317,7 +288,7 @@ function printVirtualKeys() {
 
     }
 
-   addEventListener('keydown', print)*/
+ */
 
   /* function print(event) {
         let down = event.keyCode;
