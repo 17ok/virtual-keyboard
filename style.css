@@ -91,6 +91,8 @@ body {
   background: white;
   -webkit-box-shadow: 5px 2px 2px #c5ee0b;
           box-shadow: 5px 2px 2px #c5ee0b;
+  -webkit-transition: All 0.5s ease;
+  transition: All 0.5s ease;
 }
 
 .keyboard-key-light ::after {
@@ -102,5 +104,9 @@ body {
   height: 5px;
   border-radius: 50%;
   background: white;
+}
+
+.info {
+  padding-top: 30px;
 }
 /*# sourceMappingURL=style.css.map */

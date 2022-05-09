@@ -76,6 +76,7 @@ body{
     color: grey;
     background: white;
     box-shadow: 5px 2px 2px rgba($color: rgb(197, 238, 11), $alpha: 1.0);
+    transition: All 0.5s ease;
  }
 
  .keyboard-key-light{
@@ -89,4 +90,7 @@ body{
      border-radius: 50%;
      background: white;
  }
+}
+.info{
+    padding-top: 30px;
 }
