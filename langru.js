@@ -266,8 +266,8 @@ export default
           code: 'Slash',
         },
         {
-          small: 'ArrowUp',
-          shift: 'ArrowUp',
+          small:  '▲',
+          shift:  '▲',
           code: 'ArrowUp',
         },
         {
@@ -301,18 +301,18 @@ export default
           code: 'AltRight',
         },
         {
-          small: 'ArrowLeft',
-          shift: 'ArrowLeft',
+          small: '◄',
+          shift: '◄',
           code: 'ArrowLeft',
         },
         {
-          small: 'ArrowDown',
-          shift: 'ArrowDown',
+          small: '▼',
+          shift: '▼',
           code: 'ArrowDown',
         },
         {
-          small: 'ArrowRight',
-          shift:'ArrowRight',
+          small: '►',
+          shift:'►',
           code: 'ArrowRight',
         },
         {

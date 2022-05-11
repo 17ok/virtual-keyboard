@@ -4,7 +4,6 @@ export default {ruLang, enLang};
 
 
 
-
 /*
 const Keybuttons = {
     constructor({small, shift, code}) {
@@ -15,26 +14,23 @@ const Keybuttons = {
 }
 */
 
-//import * as lang from './lang.js';
-//let engLang = lang.default;
-//console.log(engLang);
-//const textField = document.querySelector('.keyboard-textarea');
 
 const Keyboard = {
    
-    // mainElements
         wrapper: null,
         textarea: null,
         keyboard: null,
         info: null,
         keyBtns: [],
 
-       values:{
-        capsLock: false,
+       
+        capsL: false,
+        shift: false,
+        alt: false,
         value: '',
-       // language: enLang,
-       textField: ''
-       },
+       language: true,
+       textField: '',
+    
         
 
     //create main elements with major functionality
@@ -51,7 +47,7 @@ const Keyboard = {
 
         this.info = document.createElement('div');
         this.info.classList.add('info');
-        this.info.textContent = ' This Keyboard is created for Windows OS. Language change buttons Shift + Alt';
+        this.info.textContent = ' This Keyboard is created for Windows OS. Language change buttons ShiftL + AltL';
 
 
         this.keyboard.appendChild(this.createKeyBtns());
@@ -64,18 +60,19 @@ const Keyboard = {
 
         this.textarea.value = '';
 
-      //  this.textarea.addEventListener('focus', () => {
-     //       this.textarea.value += this.values.value;
-      //  })
+      
           
     },
 
     //create key buttons
     createKeyBtns(){
-        const fragment = document.createDocumentFragment();
-       let language = enLang;
-        const textField = document.getElementsByTagName('textarea');
-        language.forEach(function (key) {
+    const fragment = document.createDocumentFragment();
+    const textField = document.getElementsByTagName('textarea');
+   this.language = this.languageGet();
+    let languageArray = this.language ? enLang : ruLang;
+      
+        languageArray.forEach(key =>{
+        
              const keyBtn = document.createElement('button');
              keyBtn.classList.add('keyboard-key');
              keyBtn.setAttribute('data-type', key.code);
@@ -113,8 +110,13 @@ const Keyboard = {
                    keyBtn.classList.add('keyboard-key-two');
                    keyBtn.textContent = key.small;
                   keyBtn.addEventListener('click', () =>{
-                      this.capsLockToggle();
-                      this.values.capsLock = !this.values.capsLock;
+                      keyBtn.classList.toggle('keyboard-key-active');
+                     if (!this.capsL) {
+                        this.capsL = true;
+                    } else {
+                        this.capsL = false;
+                    };
+                    this.capsLockToggle();  
                   })
                 };
                break;
@@ -132,25 +134,100 @@ const Keyboard = {
                 {
                 keyBtn.classList.add('keyboard-key-two');
                 keyBtn.textContent = key.small;
+                keyBtn.addEventListener('mousedown', () =>{
+                    keyBtn.classList.add('keyboard-key-active');
+                    keyBtn.classList.add('changer');
+                    this.shiftUp();
+                    this.shift = true;   
+                });
+                keyBtn.addEventListener('mouseup', () =>
+                {setTimeout(() => {
+                    keyBtn.classList.remove('keyboard-key-active');
+                    keyBtn.classList.remove('changer');
+                   this.shiftDown();
+                  this.shift = false;
+                }, 500)  
+                })
                 };
                 break;
                 case 'ArrowUp':
                 {
                 keyBtn.innerHTML = '&#11205;';
+                keyBtn.addEventListener('click', () =>{
+                    textField[0].value += key.small;
+                 })
                
                 };
+                break;
+               case 'ControlRight':
+             {
+            keyBtn.textContent = key.small;
+            keyBtn.addEventListener('click', () =>{
+            textField[0].value += "";
+        })
+            };
+                break;
+                case 'ControlLeft':
+             {
+            keyBtn.textContent = key.small;
+            keyBtn.addEventListener('click', () =>{
+            textField[0].value += "";
+        })
+            };
+                break;
+                case 'MetaLeft':
+             {
+            keyBtn.textContent = key.small;
+            keyBtn.addEventListener('click', () =>{
+            textField[0].value += "";
+        })
+            };
+                break;
+                case 'AltLeft':
+             {
+            keyBtn.textContent = key.small;
+            keyBtn.addEventListener('mousedown', () =>{
+                keyBtn.classList.add('keyboard-key-active');
+                keyBtn.classList.add('changer');
+                this.alt = true;
+                textField[0].value += "";
+            });
+            keyBtn.addEventListener('mouseup', () =>
+            {setTimeout(() => {
+                keyBtn.classList.remove('keyboard-key-active');
+                keyBtn.classList.remove('changer');
+               this.alt = false;
+            }, 500)  
+            })
+            };
+                break;
+                case 'AltRight':
+             {
+            keyBtn.textContent = key.small;
+            keyBtn.addEventListener('click', () =>{
+            textField[0].value += "";
+           
+        })
+            };
                 break;
                 case 'ShiftRight':
                 {
                 keyBtn.classList.add('keyboard-key-two');
                 keyBtn.textContent = key.small;
+                keyBtn.addEventListener('mousedown', () =>{
+                    keyBtn.classList.add('keyboard-key-active');
+                    this.shiftUp();
+                    
+                })
+                keyBtn.addEventListener('mouseup', () =>
+                {setTimeout(() => {
+                    keyBtn.classList.remove('keyboard-key-active');
+                   this.shiftDown();
+                }, 500)  
+                })
                 };
                 break;
-        case 'ControlLeft':
-             {
-            keyBtn.textContent = key.small;
-            };
-                break;
+        
                  case 'Space':
                 {
                 keyBtn.classList.add('keyboard-key-seven');
@@ -163,25 +240,39 @@ const Keyboard = {
                 case 'ArrowLeft':
                 {
                 keyBtn.innerHTML = '&#11207;';
+                keyBtn.addEventListener('click', () =>{
+                    textField[0].value += key.small;
+                 })
+                
                  };
                     break;
                 case 'ArrowDown':
                 {
                 keyBtn.innerHTML = '&#11206;';
+                keyBtn.addEventListener('click', () =>{
+                    textField[0].value += key.small;
+                 })
                 };
                 break;
                 case 'ArrowRight':
                 {
                     keyBtn.innerHTML = '&#11208;';
+                    keyBtn.addEventListener('click', () =>{
+                        textField[0].value += key.small;
+                     })
                 };
                 break;
-                 default: 
-                  
-                 keyBtn.textContent = key.small;
-                keyBtn.addEventListener('mousedown', () => {
-                    textField[0].value += key.small;
-                });
+                 default:
+                         if (this.capsL) {
+                            keyBtn.textContent = key.shift;
+                          } else {
+                            keyBtn.textContent = key.small;
+                          };  
                  
+                keyBtn.addEventListener('mousedown', () => {
+                    this.languageToggle();
+                    textField[0].value += this.capsL||this.shift ? key.shift : key.small;
+                });
                  
                break;
                 }    
@@ -190,25 +281,73 @@ const Keyboard = {
        
        return fragment;
     
+    
 
     },
     capsLockToggle() {
-       // this.values.capsLock = !this.values.capsLock;
-        const buttonsArr = this.keyboard.querySelectorAll('.keyboard-key');
-        console.log(buttonsArr);
-        for (const element of buttonsArr){
-         {
-                //element.textContent = 
-                this.values.capsLock ? element.textContent.toUpperCase() : element.textContent.toLowerCase();
-            }
+        for (const keyBtn of this.keyBtns){
+              keyBtn.textContent = this.capsL ? keyBtn.textContent.toUpperCase(): keyBtn.textContent.toLowerCase(); 
         }
     },
+    shiftUp() {
+        for (const keyBtn of this.keyBtns){
+            keyBtn.textContent =  keyBtn.textContent.toUpperCase();
+      }
+    },
+    shiftDown() {
+            for (const keyBtn of this.keyBtns){
+          keyBtn.textContent =   keyBtn.textContent.toLowerCase();
+         }
+         
+
+        },
+        //languageChange(){
+            //const changer = document.querySelectorAll('.changer');
+
+
+       // },
+        
+   /* languageChange() {
+        if (this.language === true){
+            this.language = false;
+        } else {
+            this.language = false;
+        }
+    },*/
+   languageToggle(){
+        if (this.alt && this.shift) {
+            this.language = !this.language;
+            console.log(this.language);
+        }else {
+            this.language = this.language;
+            console.log(this.language)
+            
+        }
+        
+    },
+    /*,
+    languageSet(){
+        window.localStorage.setItem('lang', this.language);
+    } ,
+    */
+   languageGet(){
+   if (this.shift === true || this.alt === true){
+       return !this.language;
+   }      else {
+       return this.language;
+   }
+   }
+ 
+   
 
 };
 
 window.addEventListener("DOMContentLoaded", function() {Keyboard.createElements();});
 window.addEventListener('keydown', keydown);
 window.addEventListener('keyup', keyup);
+
+
+
 const keyboardButtons = document.getElementsByTagName('button');
 const keyboard = document.querySelector('.keyboard-container');
 
@@ -217,6 +356,8 @@ function keydown(event){
     const keyactive = document.querySelector(`[data-type =${event.code}]`);
     if (keyactive) {
         keyactive.classList.add('keyboard-key-active');
+      
+       
     }
 };
 function keyup(event){
@@ -226,11 +367,12 @@ function keyup(event){
     }
 };
 
-const textField = document.getElementsByTagName('textarea');
-console.log(textField);
-console.log(textField.data);
+
+    
+    
 
 
+/*
 function setLanguage(language){
     window.localStorage.setItem('language', language)
 
@@ -254,63 +396,9 @@ function changeLanguage() {
     }
 
     }
-/*
-function capsLockchange(){
-    let capsBtn = document.querySelector(`[data-type =${CapsLock}]`);
-    if (capsBtn.classList.contains('keyboard-key-active'||'keyboard-key-activated'){
-        function() {Keyboard.createKeyBtns();}
-    } )
-}
 */
 
+ 
+  
 
-    
- /*
-function print(event) {
-       const keyactive = document.querySelector(`[data-type =${event.code}]`);
-        let onkeydown = event.code;
-        let textField = document.getElementsByTagName('textarea');
-        engLang.forEach(elem => {
-            if (elem.code === onkeydown)
-            {
-                if (elem.[data-type =${event.code}]=== 'Enter'){
-                    textField.textContent += '\n';
-                } else {
-                    textField.textContent = elem.key.small;
-                }
-
-
-            }
-           
-
-
-        })
-
-    }
-
- */
-
-  /* function print(event) {
-        let down = event.keyCode;
-        let textField = document.querySelector('.keyboard-textarea');
-        engLang.forEach(elem => {
-            console.log(elem);
-            if (elem.code === down)
-            {
-                if (elem.code === 'Enter'){
-                    textField.textContent += '\n';
-                } else {
-                    textField.textContent = elem.key.small;
-                }
-                return textField;
-            }
-
-            })
-           
-
-
-        }
-       /* document.querySelector('.keyboard-textarea').onkeypress = function(event) {
-            textField.textContent += key.small;
-
-        }*/
+   
